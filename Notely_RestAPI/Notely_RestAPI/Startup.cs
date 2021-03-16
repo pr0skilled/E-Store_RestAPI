@@ -4,14 +4,20 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Sqlite;
+using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using NotelyRestApi.Database;
+using NotelyRestApi.Repositories.Implementations;
+using NotelyRestApi.Repositories.Interfaces;
 
-namespace E_Store_RestAPI
+namespace NotelyRestApi
 {
     public class Startup
     {
@@ -25,11 +31,13 @@ namespace E_Store_RestAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
+            string connection = Configuration.GetConnectionString("DefaultConnection");
+            services.AddDbContext<NotelyContext> (options => options.UseSqlite(connection));
+            services.AddTransient<INoteRepository, NoteRepository>();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "E_Store_RestAPI", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "NotelyRestApi", Version = "v1" });
             });
         }
 
@@ -40,7 +48,7 @@ namespace E_Store_RestAPI
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "E_Store_RestAPI v1"));
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "NotelyRestApi v1"));
             }
 
             app.UseRouting();
