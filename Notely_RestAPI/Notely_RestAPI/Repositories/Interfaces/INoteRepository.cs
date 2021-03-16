@@ -12,10 +12,10 @@ namespace NotelyRestApi.Repositories.Interfaces
 
         IEnumerable<Note> GetNotes();
 
-        long AddNote(Note note);
+        void AddNote(Note note);
 
-        bool UpdateNote(Note note);
+        void UpdateNote(Note note);
 
-        bool DeleteNote(long id);
+        void DeleteNote(long id);
     }
 }

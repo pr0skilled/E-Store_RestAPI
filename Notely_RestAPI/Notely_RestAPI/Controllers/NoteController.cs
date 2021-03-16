@@ -50,6 +50,7 @@ namespace NotelyRestApi.Controllers
         [HttpPut]
         public ActionResult<Note> UpdateNote(Note note)
         {
+            note.LastModified = DateTime.Now;
             repository.UpdateNote(note);
             return note;
         }

@@ -27,57 +27,23 @@ namespace NotelyRestApi.Repositories.Implementations
             return context.Notes;
         }
 
-        public long AddNote(Note note)
+        public void AddNote(Note note)
         {
-            try
-            {
-                context.Notes.Add(note);
-                context.SaveChanges();
-                return note.Id;
-            }
-            catch
-            {
-                return 0;
-            }
+            context.Notes.Add(note);
+            context.SaveChanges();
         }
 
-        public bool UpdateNote(Note note)
+        public void UpdateNote(Note note)
         {
-            try
-            {
-                Note oldNote = context.Notes.SingleOrDefault(x => x.Id == note.Id);
-
-                if (oldNote != null)
-                {
-                    oldNote.Detail = note.Detail;
-                    oldNote.Subject = note.Subject;
-                    oldNote.IsDeleted = note.IsDeleted;
-                    oldNote.LastModified = DateTime.Now;
-                    context.Notes.Update(oldNote);
-                    context.SaveChanges();
-                    return true;
-                }
-                return false;
-            }
-            catch
-            {
-                return false;
-            }
+            context.Notes.Update(note);
+            context.SaveChanges();
         }
 
-        public bool DeleteNote(long id)
+        public void DeleteNote(long id)
         {
-            try
-            {
-                Note note = context.Notes.Find(id);
-                context.Notes.Remove(note);
-                context.SaveChanges();
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
+            Note note = context.Notes.Find(id);
+            context.Notes.Remove(note);
+            context.SaveChanges();
         }
     }
 }
